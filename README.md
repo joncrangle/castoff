@@ -30,6 +30,8 @@ brew install --cask castoff
 mise bootstrap packages use -g brew-cask:joncrangle/tap/castoff
 ```
 
+mise reads third-party taps with Ruby 3 or newer, so one must be on your `PATH` (for example `mise use -g ruby`); the Ruby that ships with macOS is too old.
+
 ### Download
 
 Get `Castoff.app` from the [latest release](https://github.com/joncrangle/castoff/releases). Castoff is not notarized, so macOS blocks a downloaded copy the first time. Open it once, then choose **Open Anyway** under System Settings → Privacy & Security, or run:
