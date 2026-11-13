@@ -1,9 +1,15 @@
 {
 	"packages": {
 		".": {
-			"release-type": "rust",
+			"release-type": "simple",
 			"package-name": "castoff",
-			"bump-minor-pre-major": true
+			"bump-minor-pre-major": true,
+			"extra-files": [
+				{ "type": "toml", "path": "crates/app/Cargo.toml", "jsonpath": "$.package.version" },
+				{ "type": "toml", "path": "crates/core/Cargo.toml", "jsonpath": "$.package.version" },
+				{ "type": "toml", "path": "Cargo.lock", "jsonpath": "$.package[?(@.name.value=='castoff')].version" },
+				{ "type": "toml", "path": "Cargo.lock", "jsonpath": "$.package[?(@.name.value=='castoff-core')].version" }
+			]
 		}
 	},
 	"$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json"
