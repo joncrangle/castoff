@@ -1,0 +1,71 @@
+name: Build Assets
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: "Tag to build for (e.g. v0.1.0)"
+        required: true
+        type: string
+  workflow_call:
+    inputs:
+      tag_name:
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    name: Build and upload
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.tag_name }}
+
+      - name: Toolchain
+        run: |
+          rustup show
+          rustup target add aarch64-apple-darwin x86_64-apple-darwin
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Build Binaries
+        run: |
+          cargo build --release -p castoff --target aarch64-apple-darwin
+          cargo build --release -p castoff --target x86_64-apple-darwin
+
+      # Per-architecture tarballs of the bare binary (mise, direct download) and one universal
+      # Castoff.app (Homebrew cask, drag to /Applications).
+      - name: Package
+        run: |
+          VERSION="${{ inputs.tag_name }}"
+          VERSION=${VERSION#v}
+          mkdir -p dist
+
+          tar -czf "dist/castoff_${VERSION}_Darwin_arm64.tar.gz" -C target/aarch64-apple-darwin/release castoff
+          tar -czf "dist/castoff_${VERSION}_Darwin_x86_64.tar.gz" -C target/x86_64-apple-darwin/release castoff
+
+          lipo -create -output target/castoff-universal \
+            target/aarch64-apple-darwin/release/castoff target/x86_64-apple-darwin/release/castoff
+          CASTOFF_BIN=target/castoff-universal scripts/bundle.sh
+          ditto -c -k --keepParent target/Castoff.app "dist/Castoff-${VERSION}.app.zip"
+
+          cd dist
+          shasum -a 256 *.tar.gz *.zip > checksums.txt
+          cat checksums.txt
+
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ inputs.tag_name }}
+          files: |
+            dist/*.tar.gz
+            dist/*.zip
+            dist/checksums.txt

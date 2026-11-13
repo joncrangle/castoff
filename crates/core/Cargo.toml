@@ -1,0 +1,17 @@
+[package]
+name = "castoff-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+chrono = { version = "0.4.45", default-features = false, features = ["clock", "std"] }
+id3 = "1.17.3"
+libc = "0.2.191"
+plist = "1.10.3"
+rusqlite = { version = "0.42.0", features = ["bundled"] }
+serde_json = { version = "1.0.154", features = ["preserve_order"] }
+url = "2.5.8"
+
+[dev-dependencies]
+tempfile = "3.27.0"

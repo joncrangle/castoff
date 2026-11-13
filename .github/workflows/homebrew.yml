@@ -1,0 +1,107 @@
+name: Update Homebrew Cask
+
+on:
+  workflow_call:
+    inputs:
+      tag_name:
+        required: true
+        type: string
+    secrets:
+      HOMEBREW_TAP_TOKEN:
+        required: true
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: "Tag to update the cask for (e.g. v0.1.0)"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  update-cask:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Version Info
+        id: version
+        run: |
+          TAG="${{ inputs.tag_name }}"
+          VERSION=${TAG#v}
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Download and Parse Checksums
+        id: shas
+        run: |
+          TAG=${{ steps.version.outputs.tag }}
+          VERSION=${{ steps.version.outputs.version }}
+          CHECKSUMS_URL="https://github.com/${{ github.repository }}/releases/download/${TAG}/checksums.txt"
+
+          echo "Downloading checksums.txt from $CHECKSUMS_URL..."
+          curl -L -f -o checksums.txt "$CHECKSUMS_URL"
+
+          # Filename defined in release.yml
+          FILE_APP="Castoff-${VERSION}.app.zip"
+          APP_SHA=$(grep "$FILE_APP" checksums.txt | awk '{print $1}')
+
+          if [ -z "$APP_SHA" ]; then
+            echo "Error: Could not find SHA for $FILE_APP"
+            exit 1
+          fi
+
+          echo "app_sha=$APP_SHA" >> $GITHUB_OUTPUT
+
+      - name: Clone Homebrew tap
+        uses: actions/checkout@v7
+        with:
+          repository: joncrangle/homebrew-tap
+          token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+          path: tap
+
+      - name: Update cask
+        run: |
+          mkdir -p tap/Casks
+          CASK=tap/Casks/castoff.rb
+          VERSION=${{ steps.version.outputs.version }}
+          APP_SHA=${{ steps.shas.outputs.app_sha }}
+
+          cat > $CASK <<EOF
+          cask "castoff" do
+            version "${VERSION}"
+            sha256 "${APP_SHA}"
+
+            url "https://github.com/joncrangle/castoff/releases/download/v#{version}/Castoff-#{version}.app.zip"
+            name "Castoff"
+            desc "Copy downloaded Apple Podcasts episodes to an external drive"
+            homepage "https://github.com/joncrangle/castoff"
+
+            depends_on macos: ">= :monterey"
+
+            app "Castoff.app"
+
+            # Castoff is signed ad hoc, not notarized: clear the quarantine flag so it opens.
+            # Homebrew sets the flag; mise's brew-cask manager never does, hence must_succeed.
+            postflight do
+              system_command "/usr/bin/xattr",
+                             args: ["-dr", "com.apple.quarantine", "#{appdir}/Castoff.app"],
+                             must_succeed: false
+            end
+          end
+          EOF
+          cat $CASK
+
+      - name: Commit and push
+        run: |
+          cd tap
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          if [[ -z $(git status -s) ]]; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git add Casks/castoff.rb
+          git commit -m "Update castoff to v${{ steps.version.outputs.version }}"
+          git push

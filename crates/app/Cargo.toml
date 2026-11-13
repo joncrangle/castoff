@@ -1,0 +1,11 @@
+[package]
+name = "castoff"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+rune = { workspace = true }
+rune-kit = { workspace = true }
+castoff-core = { path = "../core" }
+chrono = { version = "0.4.45", default-features = false, features = ["clock", "std"] }

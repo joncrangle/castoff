@@ -1,0 +1,30 @@
+{"events": [
+  {"t": 1.0, "type": "key", "name": "f"},
+  {"t": 1.9, "type": "key", "name": "Down"},
+  {"t": 2.5, "type": "key", "name": "Down"},
+  {"t": 3.3, "type": "key", "name": "Escape"},
+
+  {"t": 4.0, "type": "key", "name": "Down"},
+  {"t": 4.25, "type": "key", "name": "Down"},
+  {"t": 4.7, "type": "key", "name": " "},
+  {"t": 5.1, "type": "key", "name": "Down"},
+  {"t": 5.35, "type": "key", "name": "Down"},
+  {"t": 5.6, "type": "key", "name": "Down"},
+  {"t": 6.0, "type": "key", "name": " "},
+  {"t": 6.4, "type": "key", "name": "Down"},
+  {"t": 6.8, "type": "key", "name": " "},
+  {"t": 7.6, "type": "key", "name": "s"},
+
+  {"t": 11.6, "type": "key", "name": "Tab"},
+  {"t": 12.1, "type": "key", "name": "Down"},
+  {"t": 12.5, "type": "key", "name": " "},
+  {"t": 13.1, "type": "key", "name": "d"},
+  {"t": 14.6, "type": "key", "name": "Enter"},
+
+  {"t": 15.8, "type": "key", "name": "t", "ctrl": true},
+  {"t": 16.5, "type": "key", "name": "Down"},
+  {"t": 17.2, "type": "key", "name": "Down"},
+  {"t": 17.9, "type": "key", "name": "Down"},
+  {"t": 18.8, "type": "key", "name": "Escape"},
+  {"t": 20.0, "type": "mark", "name": "end"}
+]}

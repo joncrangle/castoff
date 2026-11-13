@@ -1,0 +1,5 @@
+# The Intel build links Apple's Swift overlay for CoreMedia by @rpath but gets no rpath to find
+# it, so the binary dies at launch ("Library not loaded: @rpath/libswiftCoreMedia.dylib").
+# The Swift runtime ships with macOS in /usr/lib/swift. The Apple silicon build doesn't link it.
+[target.x86_64-apple-darwin]
+rustflags = ["-C", "link-arg=-Wl,-rpath,/usr/lib/swift"]
