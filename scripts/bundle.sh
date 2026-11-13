@@ -7,7 +7,7 @@ cd "$(dirname "$0")/.."
 
 NAME=Castoff
 ID=com.joncrangle.castoff
-VERSION=$(sed -n '/^\[workspace.package\]/,/^\[/s/^version = "\(.*\)"/\1/p' Cargo.toml)
+VERSION=$(sed -n 's/^version = "\(.*\)"/\1/p' crates/app/Cargo.toml | head -1)
 APP=target/$NAME.app
 
 BIN=${CASTOFF_BIN:-}
