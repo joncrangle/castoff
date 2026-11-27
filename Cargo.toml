@@ -7,15 +7,19 @@ edition = "2024"
 license = "GPL-3.0-only"
 
 [workspace.dependencies]
-rune = { git = "https://github.com/anomalyco/rune", rev = "47a7bc4721053dae884ed47cf2ddc59ae165d42c" }
-rune-kit = { git = "https://github.com/anomalyco/rune", rev = "47a7bc4721053dae884ed47cf2ddc59ae165d42c", default-features = false }
+rune = { git = "https://github.com/anomalyco/rune", rev = "e08594ce74a1e9100e5842ab44be0ec5794a76c3" }
+rune-kit = { git = "https://github.com/anomalyco/rune", rev = "e08594ce74a1e9100e5842ab44be0ec5794a76c3", default-features = false }
 
 # Rune's own patches, from the same rev (see Rune's crates/rune/README.md, "Depending on Rune").
 [patch.crates-io]
-winit = { git = "https://github.com/anomalyco/rune", rev = "47a7bc4721053dae884ed47cf2ddc59ae165d42c" }
-parley_engine = { git = "https://github.com/anomalyco/rune", rev = "47a7bc4721053dae884ed47cf2ddc59ae165d42c" }
-wgpu-hal = { git = "https://github.com/anomalyco/rune", rev = "47a7bc4721053dae884ed47cf2ddc59ae165d42c" }
-accesskit_windows = { git = "https://github.com/anomalyco/rune", rev = "47a7bc4721053dae884ed47cf2ddc59ae165d42c" }
+winit = { git = "https://github.com/anomalyco/rune", rev = "e08594ce74a1e9100e5842ab44be0ec5794a76c3" }
+sctk-adwaita = { git = "https://github.com/anomalyco/rune", rev = "e08594ce74a1e9100e5842ab44be0ec5794a76c3" }
+parley_engine = { git = "https://github.com/anomalyco/rune", rev = "e08594ce74a1e9100e5842ab44be0ec5794a76c3" }
+wgpu-hal = { git = "https://github.com/anomalyco/rune", rev = "e08594ce74a1e9100e5842ab44be0ec5794a76c3" }
+naga = { git = "https://github.com/anomalyco/rune", rev = "e08594ce74a1e9100e5842ab44be0ec5794a76c3" }
+accesskit_windows = { git = "https://github.com/anomalyco/rune", rev = "e08594ce74a1e9100e5842ab44be0ec5794a76c3" }
+accesskit_macos = { git = "https://github.com/anomalyco/rune", rev = "e08594ce74a1e9100e5842ab44be0ec5794a76c3" }
+accesskit_atspi_common = { git = "https://github.com/anomalyco/rune", rev = "e08594ce74a1e9100e5842ab44be0ec5794a76c3" }
 
 [profile.dev]
 debug = "line-tables-only"

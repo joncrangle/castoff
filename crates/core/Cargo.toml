@@ -6,12 +6,12 @@ license.workspace = true
 
 [dependencies]
 chrono = { version = "0.4.45", default-features = false, features = ["clock", "std"] }
-id3 = "1.17.3"
+id3 = "1.17.4"
 libc = "0.2.191"
-plist = "1.10.3"
+plist = "1.10.5"
 rusqlite = { version = "0.43.0", features = ["bundled"] }
 serde_json = { version = "1.0.154", features = ["preserve_order"] }
-url = "2.5.8"
+url = "2.5.9"
 
 [dev-dependencies]
 tempfile = "3.27.0"
